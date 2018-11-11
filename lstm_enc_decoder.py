@@ -154,7 +154,8 @@ def main(args):
         # Run training
         model.compile(optimizer='rmsprop',
                       loss='categorical_crossentropy',
-                      metrics=['accuracy', s2s_accuracy])
+                      metrics=['acc'])
+                    #   metrics=['accuracy', s2s_accuracy])
 
         history = model.fit([encoder_input_data, decoder_input_data], decoder_target_data,
                             batch_size=batch_size,
@@ -254,7 +255,7 @@ def parse_arguments(argv):
 
     parser.add_argument('--load_model', type=str, help='path of the saved .h5 model to load')
     parser.add_argument('--train_model', type=str, help='path of the .h5 model to save to')
-    parser.add_argument('--learning_curve', type=str, help='path to save the learning curve plot')
+    parser.add_argument('--learning_curve', type=str, default='learning_curve.png', help='path to save the learning curve plot')
 
     parser.add_argument('--batch_size', type=int, default=64, help='batch size')
     parser.add_argument('--epochs', type=int, default=100, help='num of epochs')
