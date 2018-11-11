@@ -25,6 +25,8 @@ python lstm_enc_decoder.py INPUT_DATA.txt [--load_model PATH_TO_LOAD]
                                           [--n_samples INTEGER(default: 1000)]
                                           [--test_set_split_ratio FLOAT(default: 0.1)]
                                           [--dropout_rate FLOAT(default: 0)]
+                                          [--n_test_output INTEGER(default: 20)]
+
 ```
 Examples:
 1. Training from scratch:

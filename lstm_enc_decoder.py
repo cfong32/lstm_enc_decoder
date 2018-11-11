@@ -19,6 +19,7 @@ from __future__ import print_function
 
 import os
 import sys
+import random
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
@@ -52,6 +53,8 @@ def main(args):
     validation_split = args.test_split_ratio  # Validation_split ratio
     dropout = args.dropout_rate               # Dropout rate
 
+    num_test_output = args.n_test_output      # Number of test outputs
+
 
     # Vectorize the data.
     input_texts = []
@@ -62,8 +65,10 @@ def main(args):
         lines = f.read().split('\n')
         
     actual_num_samples = min(num_samples, len(lines) - 1)
-    
-    for line in lines[:actual_num_samples]:
+    shuffled_lines = lines[:actual_num_samples].copy()
+    random.shuffle(shuffled_lines)
+
+    for line in shuffled_lines:
         input_text, target_text = line.split('\t')
         
         # We use "tab" as the "start sequence" character
@@ -235,7 +240,7 @@ def main(args):
 
 
     val_start = int(actual_num_samples*(1-validation_split))
-    val_end = min(val_start + 20, actual_num_samples)
+    val_end = min(val_start + num_test_output, actual_num_samples)
     for seq_index in range(val_start, val_end):
         # Take one sequence (part of the training set)
         # for trying out decoding.
@@ -264,6 +269,8 @@ def parse_arguments(argv):
 
     parser.add_argument('--test_split_ratio', type=float, default=0.1, help='portion of the dataset reserved for testing')
     parser.add_argument('--dropout_rate', type=float, default=0, help='droupout rate')
+
+    parser.add_argument('--n_test_output', type=int, default=20, help='number of prediction results (from the test set) to be printed out')
     return parser.parse_args(argv)
 
 
