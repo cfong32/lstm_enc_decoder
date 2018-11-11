@@ -23,7 +23,7 @@ python lstm_enc_decoder.py INPUT_DATA.txt [--load_model PATH_TO_LOAD]
                                           [--epochs INTEGER(default: 100)]
                                           [--latent_dim INTEGER(default: 256)]
                                           [--n_samples INTEGER(default: 1000)]
-                                          [--train_test_split_ratio FLOAT(default: 0.1)]
+                                          [--test_set_split_ratio FLOAT(default: 0.1)]
                                           [--dropout_rate FLOAT(default: 0)]
 ```
 Examples:
@@ -34,4 +34,8 @@ Examples:
 2. Continue training with a saved model
 ```
 >python lstm_enc_decoder.py dataset/abc_abc.txt --load_model model/abc_abc_e100_l128_n1000.h5 --train_model model/abc_abc_e200_l128_n1000.h5 --epochs 100 --latent_dim 128 --n_samples 1000 --learning_curve output2.png
+```
+3. Run prediction using a saved model
+```
+>python lstm_enc_decoder.py dataset/abc_abc.txt --load_model model/abc_abc_e200_l128_n1000.h5 --latent_dim 128 --test_set_split_ratio=1
 ```
