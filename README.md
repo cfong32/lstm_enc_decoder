@@ -18,7 +18,7 @@ User can run this code by calling
 ```
 python lstm_enc_decoder.py INPUT_DATA.txt [--load_model PATH_TO_LOAD]
                                           [--train_model PATH_TO_SAVE]
-                                          [--learning_curve PATH_TO_SAVE]
+                                          [--learning_curve PATH_TO_SAVE(default: 'learning_curve.png')]
                                           [--batch_size INTEGER(default: 64)]
                                           [--epochs INTEGER(default: 100)]
                                           [--latent_dim INTEGER(default: 256)]
