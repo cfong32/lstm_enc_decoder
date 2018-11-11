@@ -1,16 +1,18 @@
 '''
-This script is made based on the Keras tutorial https://github.com/keras-team/keras/blob/master/examples/lstm_seq2seq.py
+Here is implemented a simple (single-layer) LSTM encoder-decoder sequence-to-sequence model (LSTM_ED_S2S).
+It aims to provide a simple command line environment for user to test LSTM_ED_S2S model on their dataset more easily.
+The code is modified upon the Keras tutorial https://github.com/keras-team/keras/blob/master/examples/lstm_seq2seq.py
 
 User can run this code by calling
-python lstm_enc_decoder.py dataset.txt [--load_model LOAD_MODEL]
-                                       [--train_model TRAIN_MODEL]
-                                       [--batch_size BATCH_SIZE]
-                                       [--epochs EPOCHS]
-                                       [--latent_dim LATENT_DIM]
-                                       [--max_n_samples MAX_N_SAMPLES]
-                                       [--validation_split VALIDATION_SPLIT]
-                                       [--dropout DROPOUT]
-
+python lstm_enc_decoder.py INPUT_DATA.txt [--load_model PATH_TO_LOAD]
+                                          [--train_model PATH_TO_SAVE]
+                                          [--learning_curve PATH_TO_SAVE]
+                                          [--batch_size INTEGER(default: 64)]
+                                          [--epochs INTEGER(default: 100)]
+                                          [--latent_dim INTEGER(default: 256)]
+                                          [--n_samples INTEGER(default: 1000)]
+                                          [--train_test_split_ratio FLOAT(default: 0.1)]
+                                          [--dropout_rate FLOAT(default: 0)]
 '''
 
 from __future__ import print_function
@@ -35,17 +37,22 @@ def s2s_accuracy(y_true, y_pred):
     return K.zeros(y_pred)
 
 def main(args):
-    batch_size = args.batch_size        # Batch size for training.
-    epochs = args.epochs                # Number of epochs to train for.
-    latent_dim = args.latent_dim        # Latent dimensionality of the encoding space.
-    num_samples = args.n_samples    # Number of samples to train on.
-    data_path = args.data_path          # Path to the data txt file on disk.
-    validation_split = args.validation_split  # Validation_split ratio
-    load_model = args.load_model        # Path to the model file saved.     
-    train_model = args.train_model      # Path to the model file saved.
-    dropout = args.dropout              # Dropout rate
-    save_graph_path = os.path.splitext(str(train_model))[0] + '.png'
-    
+    # Reading input arguments
+    batch_size = args.batch_size  # Batch size for training.
+    epochs = args.epochs          # Number of epochs to train for.
+    latent_dim = args.latent_dim  # Latent dimensionality of the encoding space.
+    num_samples = args.n_samples  # Number of samples to train and test on.
+
+    data_path = args.input_data           # Path to the data txt file on disk.
+    load_model = args.load_model          # Path to the model file saved.     
+    train_model = args.train_model        # Path to the model file saved.
+    save_graph_path = args.learning_curve  # Path to save the graph
+    if save_graph_path[-4:] != '.png': save_graph_path += '.png'
+
+    validation_split = args.test_split_ratio  # Validation_split ratio
+    dropout = args.dropout_rate               # Dropout rate
+
+
     # Vectorize the data.
     input_texts = []
     target_texts = []
@@ -243,15 +250,19 @@ def main(args):
 def parse_arguments(argv):
     parser = argparse.ArgumentParser()
     
-    parser.add_argument('data_path', type=str, help='input data path')
-    parser.add_argument('--load_model', type=str, help='path of model saved')
-    parser.add_argument('--train_model', type=str, help='path of model to be saved')
-    parser.add_argument('--batch_size', type=int, default=64, help='batch_size')
+    parser.add_argument('input_data', type=str, help='path of the input data, normally a txt file')
+
+    parser.add_argument('--load_model', type=str, help='path of the saved .h5 model to load')
+    parser.add_argument('--train_model', type=str, help='path of the .h5 model to save to')
+    parser.add_argument('--learning_curve', type=str, help='path to save the learning curve plot')
+
+    parser.add_argument('--batch_size', type=int, default=64, help='batch size')
     parser.add_argument('--epochs', type=int, default=100, help='num of epochs')
-    parser.add_argument('--latent_dim', type=int, default=256, help='latent_dim inside lstm')
-    parser.add_argument('--n_samples', type=int, default=10000, help='first n number of samples(lines) to be inputed for training')
-    parser.add_argument('--validation_split', type=float, default=0.1, help='portion reserved for validation (last part of input data)')
-    parser.add_argument('--dropout', type=float, default=0, help='droupout rate')
+    parser.add_argument('--latent_dim', type=int, default=256, help='latent dimension inside the LSTM')
+    parser.add_argument('--n_samples', type=int, default=1000, help='first n number of samples(lines) from the input data to be loaded for training and testing')
+
+    parser.add_argument('--test_split_ratio', type=float, default=0.1, help='portion of the dataset reserved for testing')
+    parser.add_argument('--dropout_rate', type=float, default=0, help='droupout rate')
     return parser.parse_args(argv)
 
 
