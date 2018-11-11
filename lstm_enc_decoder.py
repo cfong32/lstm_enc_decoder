@@ -6,12 +6,12 @@ The code is modified upon the Keras tutorial https://github.com/keras-team/keras
 User can run this code by calling
 python lstm_enc_decoder.py INPUT_DATA.txt [--load_model PATH_TO_LOAD]
                                           [--train_model PATH_TO_SAVE]
-                                          [--learning_curve PATH_TO_SAVE]
+                                          [--learning_curve PATH_TO_SAVE(default: 'learning_curve.png')]
                                           [--batch_size INTEGER(default: 64)]
                                           [--epochs INTEGER(default: 100)]
                                           [--latent_dim INTEGER(default: 256)]
                                           [--n_samples INTEGER(default: 1000)]
-                                          [--train_test_split_ratio FLOAT(default: 0.1)]
+                                          [--test_split_ratio FLOAT(default: 0.1)]
                                           [--dropout_rate FLOAT(default: 0)]
 '''
 
