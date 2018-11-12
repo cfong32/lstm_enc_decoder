@@ -1,6 +1,6 @@
 '''
 This script is modified based on squeezenet-keras/visual_callbacks.py 
-changes:
+major changes:
     1. self.save_graph, instead of a boolean, has changed to a string containing the file path to save the graph
         Please set self.save_graph = False to avoid saving the graph
     2. y-axis of the loss curve is in log scale.
