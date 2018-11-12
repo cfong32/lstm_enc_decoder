@@ -156,11 +156,17 @@ def main(args):
         # To visualize learning curve
         plotter = AccLossPlotter(graphs=['loss', 'acc'], save_graph=save_graph_path)
 
+        # Define custom accuracy metric
+        # It simply not to compare the character after '\n' (suppose to be the last character)
+        def acc(y_true, y_pred):
+            y_true_copy = y_true[:,:-1,:]
+            y_pred_copy = y_pred[:,:-1,:]
+            return K.cast(K.equal(K.argmax(y_true_copy, axis=-1), K.argmax(y_pred_copy, axis=-1)), K.floatx())
+
         # Run training
         model.compile(optimizer='rmsprop',
                       loss='categorical_crossentropy',
-                      metrics=['acc'])
-                    #   metrics=['accuracy', s2s_accuracy])
+                      metrics=[acc])
 
         history = model.fit([encoder_input_data, decoder_input_data], decoder_target_data,
                             batch_size=batch_size,
